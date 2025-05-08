@@ -8,7 +8,7 @@ body,html{
 #cover{
     width: 100%;
     height: 100vh;
-    background: url(../images/bg.jpg);
+    background: url(https://img2.tradewheel.com/uploads/images/mce_uploads/0032729001739360278-5640.jpg);
     background-size: cover;
 }
 .chat-pop{
@@ -125,10 +125,38 @@ body,html{
     display: flex;
     align-items: center;
     justify-content: center;
+    gap: .5vw;
+}
+.message-text input{
+    position: relative;
+    outline: none;
+    border: none;
+    padding: .5vw;
+    width: 95%;
+}
+.user-inputs{
+    position: relative;
+    width: 100%;
+}
+.user-inputs span{
+    position: absolute;
+    color: red;
+    right: 0;
+    top: 0;
+}
+.message-text input:before{
+    content: '*';
+    position: absolute;
+    font-size: 1vw;
+    color: red;
+    right: 0;
+    width: 1vw;
+    height: 1vw;
 }
 .bot-message .message-text{
     background-color: #f2f2ff;
-    align-items: end;
+    flex-direction: column;
+    align-items: start;
     justify-content: start;
 }
 .user-message{
@@ -146,6 +174,26 @@ body,html{
     background-color: #fff;
     border-radius: 50%;
     margin-left: 10px;
+}
+.bot-message ul{
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5vw;
+    padding: 0;
+    margin: 0;
+}
+.bot-message li{
+    text-decoration: none;
+    list-style-type: none;
+    padding: .5vw;
+    border: 1px solid #53A7DD;
+    border-radius: .5vw;
+    cursor: pointer;
+}
+.bot-message li:hover{
+    background-color: #53A7DD;
+
 }
 .thinking .message-text{
     border-radius: 10vw;
@@ -191,6 +239,7 @@ body,html{
     border: 1px solid #cdcdcd;
     border-radius: 5vw;
     padding: 0 5px;
+    transition: all ease .4s;
 }
 .chat-input:focus-within{
     outline: 1px solid royalblue;
@@ -199,6 +248,13 @@ body,html{
     width: 100%;
     outline: none;
     border: none;
+}
+#chat_input:disabled .chat-input{
+    cursor: not-allowed;
+}
+#send-message:disabled .chat-input {
+    opacity: 0.1;
+    cursor: not-allowed;
 }
 #send-message{
     width: 2.5vw;
