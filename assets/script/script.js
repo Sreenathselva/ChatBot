@@ -100,52 +100,35 @@ const handleOutgoingMessage = (e) => {
 
 // }
 
+
 document.querySelector('.details').addEventListener('click', function () {
     const name = document.getElementById('user_name').value.trim();
     const email = document.getElementById('user_email').value.trim();
     const chatInput = document.getElementById('chat_input');
     const sendButton = document.getElementById('send-message');
 
+    // Simple email regex
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (name !== '' && emailRegex.test(email)) {
-        // Enable chat input (optional at this stage)
+        // Enable chat input and send button
         chatInput.disabled = false;
         sendButton.disabled = false;
 
-        // Replace message with category options
-        const botMessageText = document.querySelector('.bot-message .message-text');
-        botMessageText.innerHTML = `
-            <p>Thank you, ${name}! Please select one of the following:</p>
-            <ul class="category-options">
-                <li onclick="selectCategory('Delegate')">Delegate</li>
-                <li onclick="selectCategory('Sponsor')">Sponsor</li>
-                <li onclick="selectCategory('Solution Provider')">Solution Provider</li>
-                <li onclick="selectCategory('Speaking')">Speaking</li>
-                <li onclick="selectCategory('Other')">Other</li>
-            </ul>
-        `;
+        // Optional: Hide the name/email form after submission
+        document.querySelector('.bot-message .message-text').innerHTML = `Thank you ${name}! How can I help you today?`;
+       
+        document.querySelector('.chat-input').style.opacity= 1;
     } else {
         alert('Please enter a valid name and email.');
     }
 });
 
-// Disable input at the start
+// Initially disable the chat input
 window.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('chat_input').disabled = true;
-    document.getElementById('send-message').disabled = true;
+    document.querySelector('.chat-input').style.opacity= 0;
 });
 
-// Dummy function to handle category selection
-function selectCategory(category) {
-    const botBody = document.querySelector('.chat-body');
-    const categoryMessage = document.createElement('div');
-    categoryMessage.classList.add('message', 'user-message');
-    categoryMessage.innerHTML = `<div class="message-text">${category}</div>`;
-    botBody.appendChild(categoryMessage);
-
-    // Continue with your logic here (e.g., ask for phone, job title, etc.)
-}
 
 // handle Enter key press for sending messages
 messageInput.addEventListener("keydown",(e)=>{
