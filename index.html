@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CHATBOT</title>
+    <title>CHATBOT - Hybrid</title>
     <script src="https://kit.fontawesome.com/5ce4fbc9d4.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 <body>
     <div id="cover">
-
+        <button id="changeBot">CHANGE THE BOT</button>
     </div>
     <div class="chat-pop">
         <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512" x="0" y="0" viewBox="0 0 512.052 512.052" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><path d="M467.526 428.926c28.8-30.9 44.5-69.1 44.5-108.9 0-49.8-24.6-94.9-64-126.9-.9 114.1-108.2 206.9-240 206.9h-89.2c34.5 56.9 104.6 96 185.2 96h192c6.5 0 12.3-3.9 14.8-9.9s1.1-12.9-3.5-17.4l-39.8-39.8z" style="" fill="#64b5f6" data-original="#64b5f6"></path><path d="M208.026 16.026c-114.7 0-208 78.9-208 176 0 39.8 15.7 77.9 44.5 108.9l-39.8 39.8c-4.6 4.6-6 11.5-3.5 17.4 2.5 6 8.3 9.9 14.8 9.9h192c114.7 0 208-78.9 208-176s-93.3-176-208-176z" style="" fill="#2196f3" data-original="#2196f3" class=""></path><path d="M304.026 144.026h-192c-8.8 0-16 7.2-16 16s7.2 16 16 16h192c8.8 0 16-7.2 16-16s-7.2-16-16-16zM240.026 208.026h-128c-8.8 0-16 7.2-16 16s7.2 16 16 16h128c8.8 0 16-7.2 16-16s-7.2-16-16-16z" style="" fill="#fafafa" data-original="#fafafa" class=""></path></g></svg>
@@ -18,27 +18,45 @@
         <!-- ChatBot header -->
         <div class="chat-box-top">
             <div class="chat-img">
-                <svg class="bot-svg" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink"  x="0" y="0" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><path fill-rule="evenodd" d="M255.752.447c141.376 0 256 114.587 256 255.963s-114.623 256.007-256 256.007-256-114.63-256-256.007S114.368.447 255.752.447zM234.488 147.77a29.973 29.973 0 0 0 16.02 8.356v21.018H261v-21.018a30.091 30.091 0 1 0-26.507-8.356zm153.294 79.749v99.8h7.55a15.952 15.952 0 0 0 15.894-15.9v-68a15.953 15.953 0 0 0-15.894-15.9zm-264.064 99.8v-99.8h-7.548a15.958 15.958 0 0 0-15.893 15.9v68a15.957 15.957 0 0 0 15.893 15.9zM346.1 187.638H165.4a31.283 31.283 0 0 0-31.185 31.188v117.181A31.3 31.3 0 0 0 165.4 367.2h58.92v.018a5.213 5.213 0 0 1 4.526 2.625l5.693 9.851c.056.087.112.174.162.268l21.056 36.469 26.657-46.169a5.242 5.242 0 0 1 4.768-3.062H346.1a31.3 31.3 0 0 0 31.186-31.194v-117.18a31.283 31.283 0 0 0-31.186-31.188zM215.345 311.6a45.574 45.574 0 0 0 80.813 0 5.222 5.222 0 1 0-9.257-4.837 35.137 35.137 0 0 1-62.3 0 5.221 5.221 0 1 0-9.254 4.837zM319.7 234.1a24.593 24.593 0 1 0 17.394 7.2 24.5 24.5 0 0 0-17.394-7.2zm9.977 14.618a14.112 14.112 0 1 0 4.13 9.975 14.074 14.074 0 0 0-4.13-9.975zM191.8 234.1a24.6 24.6 0 1 0 17.385 7.2 24.512 24.512 0 0 0-17.385-7.2zm9.974 14.618a14.112 14.112 0 1 0 4.13 9.975 14.087 14.087 0 0 0-4.129-9.974z" fill="#ffffff" opacity="1" data-original="#000000" class=""></path></g></svg>
+                <img class="bot-svg" src="assets/images/traicon-1by1.png" alt="">
             </div>
-            <span>TRAIT'AN</span>
+            <span>TRAICON</span>
             <div class="chat-close">
                 <i class="fa-solid fa-xmark"></i>
             </div>
         </div>
         <!-- ChatBot Body -->
         <div class="chat-box chat-body">
-            <div class="message bot-message">
+            <div class="message bot-message thinking" id="thinKing">
                 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><linearGradient id="a" x1="5.972" x2="505.481" y1="262.606" y2="250.259" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#58c8dd"></stop><stop offset="1" stop-color="#53a7dd"></stop></linearGradient><path fill="url(#a)" fill-rule="evenodd" d="M255.752.447c141.376 0 256 114.587 256 255.963s-114.623 256.007-256 256.007-256-114.63-256-256.007S114.368.447 255.752.447zM234.488 147.77a29.973 29.973 0 0 0 16.02 8.356v21.018H261v-21.018a30.091 30.091 0 1 0-26.507-8.356zm153.294 79.749v99.8h7.55a15.952 15.952 0 0 0 15.894-15.9v-68a15.953 15.953 0 0 0-15.894-15.9zm-264.064 99.8v-99.8h-7.548a15.958 15.958 0 0 0-15.893 15.9v68a15.957 15.957 0 0 0 15.893 15.9zM346.1 187.638H165.4a31.283 31.283 0 0 0-31.185 31.188v117.181A31.3 31.3 0 0 0 165.4 367.2h58.92v.018a5.213 5.213 0 0 1 4.526 2.625l5.693 9.851c.056.087.112.174.162.268l21.056 36.469 26.657-46.169a5.242 5.242 0 0 1 4.768-3.062H346.1a31.3 31.3 0 0 0 31.186-31.194v-117.18a31.283 31.283 0 0 0-31.186-31.188zM215.345 311.6a45.574 45.574 0 0 0 80.813 0 5.222 5.222 0 1 0-9.257-4.837 35.137 35.137 0 0 1-62.3 0 5.221 5.221 0 1 0-9.254 4.837zM319.7 234.1a24.593 24.593 0 1 0 17.394 7.2 24.5 24.5 0 0 0-17.394-7.2zm9.977 14.618a14.112 14.112 0 1 0 4.13 9.975 14.074 14.074 0 0 0-4.13-9.975zM191.8 234.1a24.6 24.6 0 1 0 17.385 7.2 24.512 24.512 0 0 0-17.385-7.2zm9.974 14.618a14.112 14.112 0 1 0 4.13 9.975 14.087 14.087 0 0 0-4.129-9.974z" opacity="1" data-original="url(#a)" class=""></path></g></svg>
-                <div class="message-text">Welcome! <br> May I know Your Name and Email
-                    <div class="user-inputs"><input type="text" placeholder="Name" name="user_email" id="user_name" required><span>*</span></div>
-                    <div class="user-inputs"><input type="email" placeholder="Email" name="user_email" id="user_email" required><span>*</span></div>
-                    <button class="details">SUBMIT</button>
+                <div class="message-text">
+                    <div class="thinking-indicator">
+                        <div class="text-dot"></div>
+                        <div class="text-dot"></div>
+                        <div class="text-dot"></div>
+                    </div>
                 </div>
+            </div>
+            <div class="message bot-message firstMSg">
+                <img src="assets/images/traicon-1by1.png" class="bot-img" alt="">
+                <div class="message-text">Got any questions? I am here to help
+                </div>
+            </div>
+             <div class="message bot-message firstMSg">
+                <img src="assets/images/traicon-1by1.png" class="bot-img" alt="">
+                <div class="message-text">Please enter your First name and Last name</div>
             </div>
             <!-- <div class="message bot-message">
                 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><linearGradient id="a" x1="5.972" x2="505.481" y1="262.606" y2="250.259" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#58c8dd"></stop><stop offset="1" stop-color="#53a7dd"></stop></linearGradient><path fill="url(#a)" fill-rule="evenodd" d="M255.752.447c141.376 0 256 114.587 256 255.963s-114.623 256.007-256 256.007-256-114.63-256-256.007S114.368.447 255.752.447zM234.488 147.77a29.973 29.973 0 0 0 16.02 8.356v21.018H261v-21.018a30.091 30.091 0 1 0-26.507-8.356zm153.294 79.749v99.8h7.55a15.952 15.952 0 0 0 15.894-15.9v-68a15.953 15.953 0 0 0-15.894-15.9zm-264.064 99.8v-99.8h-7.548a15.958 15.958 0 0 0-15.893 15.9v68a15.957 15.957 0 0 0 15.893 15.9zM346.1 187.638H165.4a31.283 31.283 0 0 0-31.185 31.188v117.181A31.3 31.3 0 0 0 165.4 367.2h58.92v.018a5.213 5.213 0 0 1 4.526 2.625l5.693 9.851c.056.087.112.174.162.268l21.056 36.469 26.657-46.169a5.242 5.242 0 0 1 4.768-3.062H346.1a31.3 31.3 0 0 0 31.186-31.194v-117.18a31.283 31.283 0 0 0-31.186-31.188zM215.345 311.6a45.574 45.574 0 0 0 80.813 0 5.222 5.222 0 1 0-9.257-4.837 35.137 35.137 0 0 1-62.3 0 5.221 5.221 0 1 0-9.254 4.837zM319.7 234.1a24.593 24.593 0 1 0 17.394 7.2 24.5 24.5 0 0 0-17.394-7.2zm9.977 14.618a14.112 14.112 0 1 0 4.13 9.975 14.074 14.074 0 0 0-4.13-9.975zM191.8 234.1a24.6 24.6 0 1 0 17.385 7.2 24.512 24.512 0 0 0-17.385-7.2zm9.974 14.618a14.112 14.112 0 1 0 4.13 9.975 14.087 14.087 0 0 0-4.129-9.974z" opacity="1" data-original="url(#a)" class=""></path></g></svg>
                 <div class="message-text">
-                    Hi
+                    <span>for what purpose you came here</span>
+                    <ul id="user-type-options">
+                        <li data-type="Delegate">Delegate</li>
+                        <li data-type="Sponsorship">Sponsorship</li>
+                        <li data-type="Solution Provider">Solution Provider</li>
+                        <li data-type="Media Partner">Media Partner</li>
+                        <li data-type="Others">Others</li>
+                    </ul>
                 </div>
             </div> -->
             <!-- <div class="message user-message">
@@ -55,15 +73,44 @@
                 </div>
             </div> -->
         </div>
+        <div class="contact-cont" style="left: -100%;">
+            <p>Our Team will Reach you out soon.</p>
+            <div class="contact-boxes">
+                <a href="https://wa.me/+919746250525" target="_blank" class="contact-box">
+                    <i class="fa-brands fa-whatsapp"></i>
+                </a>
+                <a href="mailto:info@traiconevents.com" target="_blank" class="contact-box">
+                    <i class="fa-regular fa-envelope"></i>
+                </a>
+            </div>
+        </div>
+            
         <!-- ChatBot footer -->
-        <div class="chat-input">
-            <textarea type="text" name="" placeholder="Type your answer..." id="chat_input" class="message-input"></textarea>
-            <button id="send-message" onclick="handleUserInput()"><i class="fa-solid fa-arrow-up"></i></button>
+        <div class="chat-input chatbot1">
+            <input type="text" name="" placeholder="Type your answer..." id="chat_input" class="message-input"></input>
+            <button id="send-message"><i class="fa-solid fa-arrow-up"></i></button>
+        </div>
+        <div class="chat-input chatbot2">
+            <textarea type="text" name="" id="aiTextbox" placeholder="Ask Anything..."></textarea>
+            <button id="send-chat"><i class="fa-solid fa-arrow-up"></i></button>
         </div>
     </div>
 
 
+<script>
+//     document.addEventListener("DOMContentLoaded", function () {
+//     document.getElementById("changeBot").addEventListener("click", function () {
+//         const oldScript = document.getElementById("script_tag");
+//         const newScript = document.createElement("script");
 
-    <script src="assets/script/script.js"></script>
+//         newScript.id = "script_tag";
+//         newScript.src = "script.js"; // New source file
+
+//         // Replace the old script with the new one
+//         oldScript.parentNode.replaceChild(newScript, oldScript);
+//     });
+// });
+</script>
+    <script id="script_tag" src="assets/script/script.js"></script>
 </body>
 </html>

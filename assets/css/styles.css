@@ -8,15 +8,15 @@ body,html{
 #cover{
     width: 100%;
     height: 100vh;
-    background: url(https://img2.tradewheel.com/uploads/images/mce_uploads/0032729001739360278-5640.jpg);
+    background: url(../images/Screenshot\ 2025-05-13\ 115106.jpg);
     background-size: cover;
 }
 .chat-pop{
     position: fixed;
     right: 1vw;
     bottom: 1vw;
-    width: 6vw;
-    height: 6vw;
+    width: 4vw;
+    height: 4vw;
     border-radius: 50%;
     border: 1px solid #ffffff;
     background-color: #fff;
@@ -28,11 +28,14 @@ body,html{
 .chat-pop svg{
     width: 50%;
 }
+.bot-img{
+    width: 2.5vw;
+}
 .chat-bot{
     position: fixed;
     right: 1vw;
     bottom: -100%;
-    width: 22vw;
+    width: 25vw;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -41,7 +44,7 @@ body,html{
     height: auto;
     padding: 0 0 1vw 0;
     background: linear-gradient(to bottom,#A7C7E7,#dff4f0);
-    border: 2px solid #ffffff;
+    border: 2px solid royalblue;
     overflow: hidden;
     transition: all ease .4s;
 }
@@ -69,21 +72,35 @@ body,html{
     font-family: 'montserrat';
 }
 .chat-img{
+    position: relative;
     width: 3.5vw;
     height: 3.5vw;
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    background-color: #fff;
+    background-color: #0077b6;
+    border: 2px solid #ffffff;
     margin: .5vw;
 }
+.chat-img:after{
+    position: absolute;
+    content: '';
+    width: 10px;
+    height: 10px;
+    background-color: rgb(7, 219, 7);
+    border-radius: 50%;
+    right: 0px;
+    bottom: 0px;
+    border: 1px solid #fff;
+    z-index: 1;
+}
 .bot-svg{
-    background-color: #53A7DD;
+    background-color: #0077b6;
     border-radius: 50%;
 }
 .chat-img img{
-    width: 80%;
+    width: 90%;
 }
 .chat-close{
     width: 3vw;
@@ -101,11 +118,15 @@ body,html{
     background-color: #fff;
 }
 .chat-box{
+    position: relative;
     width: 100%;
-    height: 22vw;
+    height: 25vw;
     display: flex;
     flex-direction: column;
     overflow-y: scroll;
+}
+.chat-box::-webkit-scrollbar{
+    display: none;
 }
 .message{
     width: 100%;
@@ -175,6 +196,17 @@ body,html{
     border-radius: 50%;
     margin-left: 10px;
 }
+.message span{
+    font-weight: 500;
+}
+.bot-img{
+    width: 2vw;
+    height: 2vw;
+    background-color: #0077b6;
+    border-radius: 50%;
+    margin-left: 10px;
+    padding: 5px;
+}
 .bot-message ul{
     width: 100%;
     display: flex;
@@ -239,15 +271,28 @@ body,html{
     border: 1px solid #cdcdcd;
     border-radius: 5vw;
     padding: 0 5px;
+    margin: 0.5vw 0;
+    translate: 0vw 0.5vw;
     transition: all ease .4s;
 }
 .chat-input:focus-within{
     outline: 1px solid royalblue;
 }
-.chat-input textarea{
-    width: 100%;
+.chat-input input,textarea{
+    width: 100% !important;
     outline: none;
     border: none;
+    resize: none;
+}
+.chatbot2{
+    display: none;
+}
+.chat-input textarea{
+    margin-top: 1vw;
+    width: 100% !important;
+    outline: none;
+    border: none;
+    resize: none;
 }
 #chat_input:disabled .chat-input{
     cursor: not-allowed;
@@ -256,7 +301,7 @@ body,html{
     opacity: 0.1;
     cursor: not-allowed;
 }
-#send-message{
+#send-message,#send-chat{
     width: 2.5vw;
     height: 2.5vw;
     border: none;
@@ -271,4 +316,63 @@ body,html{
 }
 #send-message img{
     width: 70%;
+}
+
+.contact-cont{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 1vw;
+    left: -100%;
+    background-color: #fff;
+    transition: all ease .4s;
+}
+.c-active{
+    left: 0 !important;
+}
+.contact-cont p{
+    width: 100%;
+    height: auto;
+    margin: 0;
+    padding: 0;
+    font-size: 1.5vw;
+    color: royalblue;
+    font-family: 'montserrat';
+    font-weight: 600;
+    text-align: center;
+}
+.contact-boxes{
+    display: flex;
+    gap: 1vw;
+}
+.contact-box{
+    width: 5vw;
+    height: 5vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5vw;
+    gap: 1vw;
+    border-radius: 50%;
+    background-color: royalblue;
+    border: 2px solid #fff;
+    transition: all ease .4s;
+}
+.contact-box i{
+    color: #fff;
+    transition: all ease .4s;
+}
+.contact-box:hover{
+    background-color: #fff;
+    border-color: royalblue;
+}
+.contact-box:hover i{
+    color: royalblue;
+}
+a{
+    text-decoration: none;
 }
