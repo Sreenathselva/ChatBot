@@ -11,10 +11,65 @@ body,html{
     background: url(../images/Screenshot\ 2025-05-13\ 115106.jpg);
     background-size: cover;
 }
-.chat-pop{
+.chat-pop-cont{
     position: fixed;
     right: 1vw;
     bottom: 1vw;
+    gap: 1vw;
+    display: none;
+    transition: all ease .4s;
+}
+.chat-msg{
+    position: relative;
+    width: 20vw;
+    height: 4vw;
+    padding: 0 .2vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff;
+    transition: all ease .4s;
+    border-radius: .5vw;
+    visibility: hidden;
+    opacity: 0;
+    box-shadow: -3px 4px 2px 0px #4d4d4d; 
+}
+.chat-msg-active{
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+.chat-msg:after{
+    position: absolute;
+    content: '';
+    right: -0.5vw;
+    width: 1vw;
+    height: 1vw;
+    transform: rotate(45deg);
+    z-index: 0;
+    background-color: #fff;
+}
+.chat-msg span{
+    font-family: 'poppins';
+    font-weight: 400;
+    z-index: 1;
+}
+.chat-msg-close{
+    position: absolute;
+    left: -2vw;
+    top: 0;
+    font-size: .75vw;
+    width: 1.5vw;
+    height: 1.5vw;
+    border-radius: 5vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'poppins';
+    background-color: #fff;
+    border: 1px solid #000;
+    cursor: pointer;
+}
+.chat-pop{
     width: 4vw;
     height: 4vw;
     border-radius: 50%;
@@ -43,8 +98,8 @@ body,html{
     border-radius: 1.5vw;
     height: auto;
     padding: 0 0 1vw 0;
-    background: linear-gradient(to bottom,#A7C7E7,#dff4f0);
-    border: 2px solid royalblue;
+    background: linear-gradient(to top,#b3e5ff,#e5f6ff);
+    border: 2px solid #005380;
     overflow: hidden;
     transition: all ease .4s;
 }
@@ -63,18 +118,40 @@ body,html{
     border-radius: 1.5vw;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
-    background-color: royalblue;
+    background-color: #005380;
+}
+.chat-bot-left{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.chat-bot-right{
+    display: flex;
+    gap: 1vw;
+}
+.whatsapp{
+    width: 3vw;
+    height: 3vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.whatsapp-img{
+    width: 100%;
+    height: 100%;
+    border-radius: 5vw;
 }
 .chat-box-top span{
-    font-size: 1.4vw;
+font-size: 1.1vw;
     color: #fff;
-    font-weight: 500;
+    font-weight: 400;
     font-family: 'montserrat';
 }
 .chat-img{
     position: relative;
-    width: 3.5vw;
-    height: 3.5vw;
+    width: 3vw;
+    height: 3vw;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -111,7 +188,7 @@ body,html{
     font-family: 'barlow';
     font-weight: 400;
     font-size: 2vw;
-    color: royalblue;
+    color: #005380;
     align-items: center;
     justify-content: center;
     cursor: pointer;
@@ -135,7 +212,7 @@ body,html{
     gap: .5vw;
     height: auto;
     border-radius: 2vw;
-    padding: 10px 0;
+    padding: 5px 0;
     font-family: 'barlow';
 }
 .message-text{
@@ -185,7 +262,7 @@ body,html{
     justify-content: end;
 }
 .user-message .message-text{
-    background-color: royalblue;
+    background-color: #005380;
     margin-right: 10px;
     color: #fff;
 }
@@ -200,8 +277,8 @@ body,html{
     font-weight: 500;
 }
 .bot-img{
-    width: 2vw;
-    height: 2vw;
+    width: 1.5vw;
+    height: 1.5vw;
     background-color: #0077b6;
     border-radius: 50%;
     margin-left: 10px;
@@ -273,10 +350,12 @@ body,html{
     padding: 0 5px;
     margin: 0.5vw 0;
     translate: 0vw 0.5vw;
+    visibility: hidden;
+    opacity: 0;
     transition: all ease .4s;
 }
 .chat-input:focus-within{
-    outline: 1px solid royalblue;
+    outline: 1px solid #005380;
 }
 .chat-input input,textarea{
     width: 100% !important;
@@ -305,7 +384,7 @@ body,html{
     width: 2.5vw;
     height: 2.5vw;
     border: none;
-    background-color: royalblue;
+    background-color: #005380;
     border-radius: 50%;
     color: #fff;
     transition: all ease .4s;
@@ -328,7 +407,8 @@ body,html{
     flex-direction: column;
     gap: 1vw;
     left: -100%;
-    background-color: #fff;
+    background-color: #ffffff9c;
+    backdrop-filter: blur(4px);
     transition: all ease .4s;
 }
 .c-active{
@@ -340,7 +420,7 @@ body,html{
     margin: 0;
     padding: 0;
     font-size: 1.5vw;
-    color: royalblue;
+    color: #005380;
     font-family: 'montserrat';
     font-weight: 600;
     text-align: center;
@@ -358,7 +438,7 @@ body,html{
     font-size: 2.5vw;
     gap: 1vw;
     border-radius: 50%;
-    background-color: royalblue;
+    background-color: #005380;
     border: 2px solid #fff;
     transition: all ease .4s;
 }
@@ -368,11 +448,109 @@ body,html{
 }
 .contact-box:hover{
     background-color: #fff;
-    border-color: royalblue;
+    border-color: #005380;
 }
 .contact-box:hover i{
-    color: royalblue;
+    color: #005380;
 }
 a{
     text-decoration: none;
+}
+
+
+@media screen and (max-width: 660px) {
+        html, body {
+        overflow-x: hidden;
+    }
+    .chat-pop {
+    width: 15vw;
+    height: 15vw;
+    }
+    .chat-pop-cont {
+    position: fixed;
+    right: 2vw;
+    bottom: 2vw;
+    }
+    .chat-bot {
+    right: 0vw;
+    bottom: -120vh;
+    height: 100vh;
+    width: 100vw;
+    }
+    .chat-box-top {
+    width: 100%;
+    height: 15vh;
+    }
+    .chat-img {
+    width: 15vw;
+    height: 15vw;
+    }
+    .chat-bot-left{
+    gap: 3vw;
+    }
+    .chat-box-top span {
+    font-size: 3.5vw;
+    }
+    .chat-box {
+    position: relative;
+    width: 100%;
+    height: 85vh;
+    }
+    .whatsapp{
+    width: 10vw;
+    height: 10vw;
+    }
+    .chat-close {
+    width: 10vw;
+    height: 10vw;
+    font-size: 6vw;
+    }
+    .chat-img:after {
+    right: 0px;
+    bottom: 5px;
+    }
+    .bot-img {
+    width: 4vw;
+    height: 4vw;
+    }
+    .message {
+    gap: 3vw;
+    padding: 10px 0;
+    }
+    .bot-message ul {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4vw;
+    }
+    .message-text {
+    max-width: 65%;
+    font-size: 4vw;
+    }
+    .chat-bot-right {
+    display: flex;
+    gap: 4vw;
+    }
+    .message-text {
+    font-size: 4vw;
+    border-radius: 10px;
+    padding: 3vw;
+    gap: 2vw;
+    }
+    .bot-message li {
+    padding: 4vw;
+    border-radius: 2vw;
+    }
+    .chat-input {
+        width: 95%;
+        height: 12vw;
+    }
+    #send-message, #send-chat {
+        width: 9vw;
+        height: 9vw;
+    }
+    #send-message i {
+    font-size: 4.2vw;
+    }
+
 }

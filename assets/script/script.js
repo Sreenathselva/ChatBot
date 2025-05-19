@@ -19,7 +19,7 @@ const chatBot2 = document.querySelector(".chatbot2");
     }
 
 let currentStep = 0;
-const steps = ["name", "email", "purpose", "jobTitle", "company", "phone"];
+const steps = ["name", "email",  "jobTitle", "company", "phone"];
 
 const userData = {
     name: "",
@@ -29,6 +29,12 @@ const userData = {
     company: "",
     phone: ""
 };
+
+let skipSave = false;
+
+const greetingKeywords = ["hi", "hello", "hey","hlo","hoi", "good morning", "good afternoon"];
+const eventKeywords = ["event", "details", "date", "when", "where"];
+const negativeKeywords = ["not interested", "no","I won't", "I can't","na", "no thanks", "stop", "nope"];
 
 userData.sessionId = crypto.randomUUID(); // or any other UID generator 
 
@@ -78,12 +84,13 @@ const addBotMessage = (text) => {
     chatBody.scrollTop = chatBody.scrollHeight;
 };
 
+const contactCont = document.querySelector(".contact-cont");
 
 const showNextBotQuestion = () => {
     const isFinalStep = currentStep >= steps.length;
 
     // Save the previous input
-    if (currentStep > 0 && currentStep <= steps.length) {
+    if (!skipSave && currentStep > 0 && currentStep <= steps.length) {
         const prevField = steps[currentStep - 1];
         const inputValue = messageInput.dataset.lastInput || messageInput.value.trim();
         userData[prevField] = inputValue;
@@ -110,16 +117,21 @@ const showNextBotQuestion = () => {
             .catch((err) => console.error("Fetch error:", err));
     }
 
+    skipSave = false;
+
     if (isFinalStep) {
         const thinking = addThinkingMessage();
 
         setTimeout(() => {
             thinking.remove();
-            addBotMessage("Our team will get back to you soon.");
+            addBotMessage("Thank you for your information! We will get back to you shortly.");
+            addBotMessage("<span>If you have any other questions, feel free to ask!</span> ");
             chatBot1.style.display = "none";
              chatBot2.style.display = "flex";
             console.log("Final User Data:", userData);
-            // document.querySelector(".contact-cont").style.left = "0";
+            setTimeout(() => {
+                contactCont.style.left="0";
+            }, 1000);
         }, 1500);
         return;
     }
@@ -141,14 +153,15 @@ const showNextBotQuestion = () => {
     setTimeout(() => {
         thinking.remove();
         switch (field) {
+            // case "purpose":
+            //     showPurposeOptions();
+            //     break;
             case "name":
                 addBotMessage("What's your full name?");
                 break
             case "email":
-                addBotMessage(`<div>Thank you! <span>${userData.name}</span> <br> Could you please provide your official <span> Email Address</span>?</div>`);
-                break;
-            case "purpose":
-                showPurposeOptions();
+                addBotMessage(`<div>Hi there! <span>${userData.name}</span> <br> Could you please provide your official <span> Email Address</span>?</div>`);
+                addBotMessage("Note: please use your official email.");
                 break;
             case "jobTitle":
                 addBotMessage("What's your current job title?");
@@ -170,47 +183,85 @@ const handlePurposeSelection = (selectedPurpose) => {
     messageInput.dataset.lastInput = selectedPurpose;
     addUserMessage(selectedPurpose);
     messageInput.value = "";
-    currentStep++;
+    // currentStep++;
+    // showNextBotQuestion();
+    // Save purpose immediately
+    fetch("assets/php/save_user_data.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            field: "purpose",
+            value: selectedPurpose,
+            sessionId: userData.sessionId,
+        }),
+    })
+        .then((res) => res.json())
+        .then((data) => {
+            console.log("Saved purpose:", data);
+            if (!data.success) {
+                console.error("Error saving purpose:", data.error);
+            }
+        })
+        .catch((err) => console.error("Fetch error (purpose):", err));
+
+    currentStep = 0; // Start steps from name
     showNextBotQuestion();
 };
+// Attach click listeners to static HTML elements
+document.querySelectorAll("#user-type-options li").forEach(li => {
+    li.addEventListener("click", () => {
+        const choice = li.getAttribute("data-type");
+        handlePurposeSelection(choice);
+        document.querySelectorAll(".chat-input").forEach(el => {
+          el.classList.add("chat-msg-active");
+      });
+    });
+});
 
-const showPurposeOptions = () => {
-    const thinking = addThinkingMessage();
-    setTimeout(() => {
-        thinking.remove();
-        const optionsHTML = `
-               <div class="message bot-message">
-                <img src="assets/images/traicon-1by1.png" class="bot-img" alt="">
-                <div class="message-text">
-                    <span>Please let us know what you are interested in</span>
-                    <ul id="user-type-options">
-                        <li data-type="Delegate">Delegate - VIP</li>
-                        <li data-type="Speaker">Speaker</li>
-                        <li data-type="Sponsorship">Sponsor</li>
-                        <li data-type="Solution Provider">Solution Provider</li>
-                        <li data-type="Media Partner">Media Partner</li>
-                        <li data-type="Others">Others</li>
-                    </ul>
-                </div>
-            </div>
-        `;
+// const showPurposeOptions = () => {
+//     const thinking = addThinkingMessage();
+//     setTimeout(() => {
+//         thinking.remove();
+//         const optionsHTML = `
+//                <div class="message bot-message">
+//                 <img src="assets/images/traicon-1by1.png" class="bot-img" alt="">
+//                 <div class="message-text">
+//                     <span>Please let us know what you are interested in</span>
+//                     <ul id="user-type-options">
+//                         <li data-type="Delegate">Delegate - VIP</li>
+//                         <li data-type="Speaker">Speaker</li>
+//                         <li data-type="Sponsorship">Sponsor</li>
+//                         <li data-type="Solution Provider">Solution Provider</li>
+//                         <li data-type="Media Partner">Media Partner</li>
+//                         <li data-type="Others">Others</li>
+//                     </ul>
+//                 </div>
+//             </div>
+//         `;
 
-        const botMsg = createMessageElement(optionsHTML, "bot-message");
-        chatBody.appendChild(botMsg);
-        chatBody.scrollTop = chatBody.scrollHeight;
+//         const botMsg = createMessageElement(optionsHTML, "bot-message");
+//         chatBody.appendChild(botMsg);
+//         chatBody.scrollTop = chatBody.scrollHeight;
 
-        document.querySelectorAll("#user-type-options li").forEach(li => {
-            li.addEventListener("click", () => {
-                const choice = li.getAttribute("data-type");
-                userData.purpose = choice;
-                messageInput.dataset.lastInput = choice; 
-                addUserMessage(choice);
-                currentStep++;
-                showNextBotQuestion();
-            });
-        });
-    }, 1500);
-};
+//         document.querySelectorAll("#user-type-options li").forEach(li => {
+//             li.addEventListener("click", () => {
+//                 const choice = li.getAttribute("data-type");
+//                 userData.purpose = choice;
+//                 messageInput.dataset.lastInput = choice; 
+//                 addUserMessage(choice);
+//                 currentStep++;
+//                 showNextBotQuestion();
+//             });
+//         });
+//     }, 1500);
+// };
+
+function messageContainsKeyword(message, keywordList) {
+    const words = message.toLowerCase().split(/\s+|[,?.!;:()]+/);
+    const matched = keywordList.find(keyword => words.includes(keyword.toLowerCase()));
+    if (matched) console.log(`Matched keyword: ${matched}`);
+    return !!matched;
+}
 
 const handleOutgoingMessage = (e) => {
     e.preventDefault();
@@ -218,6 +269,49 @@ const handleOutgoingMessage = (e) => {
     const field = steps[currentStep];
 
     if (!input && currentStep !== 2) return;
+
+     // Check for greeting
+    if (messageContainsKeyword(input, greetingKeywords)) {
+        addUserMessage(input);
+        messageInput.value = "";
+        const thinking = addThinkingMessage();
+        skipSave = true;
+        setTimeout(() => {
+            thinking.remove();
+            addBotMessage("Hello! 👋 How can I help you regarding the event?");
+            showNextBotQuestion();
+        }, 600);
+        
+        return;
+    }
+
+    // Check for event info
+    if (messageContainsKeyword(input, eventKeywords)) {
+        addUserMessage(input);
+        messageInput.value = "";
+        const thinking = addThinkingMessage();
+        skipSave = true;
+        setTimeout(() => {
+            thinking.remove();
+            addBotMessage("The Fintech Revolution Summit – Malaysia 2025 will be held in Kuala Lumpur on August 15th–16th. Let me know what else you'd like to know!");
+            showNextBotQuestion();
+        }, 600);
+        return;
+    }
+
+    // Check for negative responses
+    if (messageContainsKeyword(input, negativeKeywords)) {
+        addUserMessage(input);
+        messageInput.value = "";
+        const thinking = addThinkingMessage();
+        skipSave = true;
+            setTimeout(() => {
+                thinking.remove();
+                addBotMessage("To assist you better, we really need your input. Could you please provide your answer? ");
+                showNextBotQuestion();
+            }, 600);
+        return;
+    }
 
     if (field === "email" && !/^\S+@\S+\.\S+$/.test(input)) {
         addBotMessage(`I'm sorry ${userData.name}, that doesn't look like an email address. Can you try again?`);
@@ -229,10 +323,10 @@ const handleOutgoingMessage = (e) => {
         return;
     }
 
-    if (currentStep === 2) {
-        // showPurposeOptions();
-        return;
-    }
+    // if (currentStep === 2) {
+    //     // showPurposeOptions();
+    //     return;
+    // }
 
     userData[field] = input;
     messageInput.dataset.lastInput = input;
@@ -243,19 +337,6 @@ const handleOutgoingMessage = (e) => {
     showNextBotQuestion();
 };
 
-// sendMessage.addEventListener("click", () => {
-    
-//     const currentField = steps[currentStep];
-//     const value = messageInput.value.trim();
-
-//     if (value) {
-//         userData[currentField] = value;
-//         console.log(`Saved ${currentField}:`, value);
-
-//         currentStep++;
-//         showNextBotQuestion();
-//     }
-// });
 
 sendMessage.addEventListener("click", handleOutgoingMessage);
 
@@ -279,6 +360,7 @@ sendMessage.addEventListener("click", handleOutgoingMessage);
         const currentDate = `${year}-${month}-${day}`;
 
         const eventPrompt = `
+        Your name is "Trait'an The Bot"
         You are a smart and friendly AI assistant designed to assist and guide attendees of the Fintech Revolution Summit – Malaysia 2025, organized by TraiCon Events.
             
         This is a high-level, business-focused summit taking place on July 23, 2025, in Kuala Lumpur, Malaysia. The event brings together fintech leaders, innovators, regulators, and financial institutions to explore emerging trends, technologies, and investment opportunities shaping the future of finance in Southeast Asia.
@@ -382,27 +464,15 @@ sendMessage.addEventListener("click", handleOutgoingMessage);
     chatBody.appendChild(outgoingMessageDiv);
 
     // Add 'thinking' animation
-    const thinkingMessageDiv = createMessageElement(`
-        <div class="message">
-            <svg>...</svg> <!-- your icon -->
-            <div class="message-text">
-                <div class="thinking-indicator">
-                    <div class="text-dot"></div>
-                    <div class="text-dot"></div>
-                    <div class="text-dot"></div>
-                </div>
-            </div>
-        </div>`, 
-        "bot-message", 
-        "thinking"
-    );
+    const thinking = addThinkingMessage();
+
     chatBody.appendChild(thinkingMessageDiv);
     chatBody.scrollTop = chatBody.scrollHeight;
 
     // Simulate delay, then show bot reply
     setTimeout(async () => {
         const botReply = await generateBotRespose();
-        thinkingMessageDiv.remove(); // remove thinking
+        thinking.remove(); // remove thinking
         addBotMessage(botReply);     // show reply
     }, 500);
 };
@@ -434,14 +504,34 @@ messageInput.addEventListener("keydown", (e) => {
         handleOutgoingMessage(e);
     }
 });
+sendMessage.addEventListener("click", (e) => handleOutgoingMessage(e));
 
+
+// chat pop animations
 const firstMSg = document.querySelectorAll(".firstMSg");
 const thinKing = document.querySelector("#thinKing");
+const chatMsg = document.querySelector(".chat-msg");
+const chatPopCont = document.querySelector(".chat-pop-cont");
+const chatMsgClose = document.querySelector(".chat-msg-close");
 
-sendMessage.addEventListener("click", (e) => handleOutgoingMessage(e));
+  document.addEventListener("DOMContentLoaded", function () {
+   setTimeout(() => {
+    
+    chatPopCont.style.display = "flex";
+    setTimeout(() => {
+        chatMsg.classList.add("chat-msg-active");
+    }, 300);
+   }, 3000); 
+   chatMsgClose.addEventListener("click", () => {
+        chatMsg.classList.remove("chat-msg-active");
+    });
+});
+
+
 const clickPop = () => {
     setTimeout(() => {
         chatBox.classList.toggle('chat-up');
+        chatMsg.classList.remove("chat-msg-active");
     }, 100);
     
     chatPop.classList.toggle('scale');
@@ -456,7 +546,7 @@ const clickPop = () => {
         firstMSg.forEach(msg => {
             msg.style.display = "flex";
         });
-    }, 1500);
+    }, 2000);
 };
 
 chatPop.addEventListener('click', clickPop);
@@ -475,6 +565,4 @@ document.addEventListener('click', function (event) {
     }
 });
 
-
-// send data to database
 
