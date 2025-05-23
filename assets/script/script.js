@@ -32,12 +32,17 @@ const userData = {
 
 let skipSave = false;
 
-const greetingKeywords = ["hi", "hello", "hey","hlo","hoi", "good morning", "good afternoon"];
-const eventKeywords = ["event", "details", "date", "when", "where"];
-const negativeKeywords = ["not interested", "no","I won't", "I can't","na", "no thanks", "stop", "nope"];
 
 userData.sessionId = crypto.randomUUID(); // or any other UID generator 
 
+function getCurrentTime() {
+    const now = new Date();
+    let hours = now.getHours();
+    const minutes = now.getMinutes().toString().padStart(2, "0");
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12 || 12;
+    return `${hours}:${minutes} ${ampm}`;
+}
 
 const createMessageElement = (content, ...classes) => {
     const div = document.createElement("div");
@@ -68,7 +73,10 @@ const addThinkingMessage = () => {
 const addUserMessage = (text) => {
     const msg = createMessageElement(`
         <div class="message user-message">
-                <div class="message-text">${text}</div>
+                <div class="message-text">${text}
+                <div class="message-time">${getCurrentTime()}</div>
+                </div>
+                    
             </div>`, "user-message", "message");
     chatBody.appendChild(msg);
     chatBody.scrollTop = chatBody.scrollHeight;
@@ -78,7 +86,10 @@ const addBotMessage = (text) => {
     const msg = createMessageElement(`
         <div class="message bot-message">
                 <img src="assets/images/traicon-1by1.png" class="bot-img" alt="">
-                <div class="message-text">${text}</div>
+                <div class="message-text">${text}
+                <div class="message-time">${getCurrentTime()}</div>
+                </div>
+                    
             </div>`, "bot-message", "message");
     chatBody.appendChild(msg);
     chatBody.scrollTop = chatBody.scrollHeight;
@@ -130,7 +141,7 @@ const showNextBotQuestion = () => {
              chatBot2.style.display = "flex";
             console.log("Final User Data:", userData);
             setTimeout(() => {
-                contactCont.style.left="0";
+                // contactCont.style.left="0";
             }, 1000);
         }, 1500);
         return;
@@ -182,28 +193,37 @@ const handlePurposeSelection = (selectedPurpose) => {
     userData.purpose = selectedPurpose;
     messageInput.dataset.lastInput = selectedPurpose;
     addUserMessage(selectedPurpose);
+    
     messageInput.value = "";
     // currentStep++;
     // showNextBotQuestion();
     // Save purpose immediately
     fetch("assets/php/save_user_data.php", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-            field: "purpose",
-            value: selectedPurpose,
-            sessionId: userData.sessionId,
-        }),
-    })
-        .then((res) => res.json())
-        .then((data) => {
-            console.log("Saved purpose:", data);
-            if (!data.success) {
-                console.error("Error saving purpose:", data.error);
-            }
-        })
-        .catch((err) => console.error("Fetch error (purpose):", err));
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+        field: "purpose",
+        value: selectedPurpose,
+        sessionId: userData.sessionId,
+    }),
+})
+.then(async (res) => {
+    const text = await res.text();  // get raw text
+    console.log("Raw response:", text);
+    try {
+        const data = JSON.parse(text);
+        console.log("Saved purpose:", data);
+        if (!data.success) {
+            console.error("Error saving purpose:", data.error);
+        }
+    } catch (e) {
+        console.error("JSON parsing error:", e, "Raw:", text);
+    }
+})
+.catch((err) => console.error("Fetch error (purpose):", err));
 
+document.querySelector("#purpose").style.display = "none";
+    
     currentStep = 0; // Start steps from name
     showNextBotQuestion();
 };
@@ -256,6 +276,13 @@ document.querySelectorAll("#user-type-options li").forEach(li => {
 //     }, 1500);
 // };
 
+const greetingKeywords = ["hi", "hello", "hey","hlo","hoi", "good morning", "good afternoon"];
+const eventKeywords = ["event", "details", "date", "when", "where"];
+const questionKeywords = ["sponsor", "delegate", "sponsorship", "enquiry", "exhibitor","packages", "exhibition", "register", "registration", "attend", "participate", "participating", "join", "joining"];
+const Qac = ["people", "attendees", "participants", "delegates", "guests", "audience", "visitors",];
+const negativeKeywords = ["not interested", "no","I won't", "I can't","na", "nothing", "no thanks", "stop", "nope"];
+
+
 function messageContainsKeyword(message, keywordList) {
     const words = message.toLowerCase().split(/\s+|[,?.!;:()]+/);
     const matched = keywordList.find(keyword => words.includes(keyword.toLowerCase()));
@@ -270,10 +297,11 @@ const handleOutgoingMessage = (e) => {
 
     if (!input && currentStep !== 2) return;
 
-     // Check for greeting
+    addUserMessage(input); // Always show user's message in chat
+    messageInput.value = ""; // Clear input box
+
+    // Greeting check
     if (messageContainsKeyword(input, greetingKeywords)) {
-        addUserMessage(input);
-        messageInput.value = "";
         const thinking = addThinkingMessage();
         skipSave = true;
         setTimeout(() => {
@@ -281,58 +309,89 @@ const handleOutgoingMessage = (e) => {
             addBotMessage("Hello! 👋 How can I help you regarding the event?");
             showNextBotQuestion();
         }, 600);
-        
         return;
     }
 
-    // Check for event info
+    // Event info check
     if (messageContainsKeyword(input, eventKeywords)) {
-        addUserMessage(input);
-        messageInput.value = "";
         const thinking = addThinkingMessage();
         skipSave = true;
         setTimeout(() => {
             thinking.remove();
-            addBotMessage("The Fintech Revolution Summit – Malaysia 2025 will be held in Kuala Lumpur on August 15th–16th. Let me know what else you'd like to know!");
+            addBotMessage("The Fintech Revolution Summit – Malaysia 2025 will be held in Kuala Lumpur on July 23rd. Let me know what else you'd like to know!");
             showNextBotQuestion();
         }, 600);
         return;
     }
 
-    // Check for negative responses
+    // Negative response check
     if (messageContainsKeyword(input, negativeKeywords)) {
-        addUserMessage(input);
-        messageInput.value = "";
         const thinking = addThinkingMessage();
         skipSave = true;
-            setTimeout(() => {
-                thinking.remove();
-                addBotMessage("To assist you better, we really need your input. Could you please provide your answer? ");
-                showNextBotQuestion();
-            }, 600);
+        setTimeout(() => {
+            thinking.remove();
+            addBotMessage("To assist you better, we really need your input. Could you please provide your answer?");
+            showNextBotQuestion();
+        }, 600);
         return;
     }
 
+    // Q&A content check
+    if (messageContainsKeyword(input, Qac)) {
+        const thinking = addThinkingMessage();
+        skipSave = true;
+        setTimeout(() => {
+            thinking.remove();
+            addBotMessage(`
+                Over 200 pre-screened delegates will be attending.
+                Featured in 50+ media mentions.
+                Backed by 100+ leading organizations.
+                Hear from 30+ renowned industry experts.
+                Connect with 25+ top solution providers.
+                Enjoy 8+ hours of dedicated networking opportunities.
+            `);
+            showNextBotQuestion();
+        }, 600);
+        return;
+    }
+
+    // Question check
+    if (messageContainsKeyword(input, questionKeywords)) {
+        const thinking = addThinkingMessage();
+        skipSave = true;
+        setTimeout(() => {
+            thinking.remove();
+            addBotMessage("To learn more about our packages, attend as a delegate, or for any additional details, kindly <span>fill out the form on our website or provide the necessary information here in this chat.</span> We're happy to assist you further.");
+            showNextBotQuestion();
+        }, 600);
+        return;
+    }
+
+    // Input validation
     if (field === "email" && !/^\S+@\S+\.\S+$/.test(input)) {
-        addBotMessage(`I'm sorry ${userData.name}, that doesn't look like an email address. Can you try again?`);
+        const thinking = addThinkingMessage();
+
+        setTimeout(() => {
+            thinking.remove();
+            addBotMessage(`I'm sorry ${userData.name}, that doesn't look like an email address. Can you try again?`);
+        }, 600);
+        
         return;
     }
 
-    if (field === "phone" && !/^\d{7,15}$/.test(input)) {
-        addBotMessage("Please enter a valid phone number (digits only).");
+    if (field === "phone" && !/^\+?\d{7,15}$/.test(input)) {
+
+        const thinking = addThinkingMessage();
+        setTimeout(() => {
+            thinking.remove();
+            addBotMessage("Please enter a valid phone number with your country code.");    
+        }, 600);
+        
         return;
     }
-
-    // if (currentStep === 2) {
-    //     // showPurposeOptions();
-    //     return;
-    // }
 
     userData[field] = input;
     messageInput.dataset.lastInput = input;
-    addUserMessage(input);
-    messageInput.value = "";
-
     currentStep++;
     showNextBotQuestion();
 };
@@ -452,21 +511,33 @@ sendMessage.addEventListener("click", handleOutgoingMessage);
 
         // handle outgoing messages
 
-   const handleOutgoingChat = (e) => {
+const handleOutgoingChat = (e) => {
     e.preventDefault();
+
     userData.message = aiMessage.value.trim();
+    if (!userData.message) return;
     aiMessage.value = "";
 
-    // create and display user message
-    const messageContent = `<div class="message-text"></div>`;
-    const outgoingMessageDiv = createMessageElement(messageContent, "user-message");
-    outgoingMessageDiv.querySelector(".message-text").textContent = userData.message;
+    // Create message container
+    const outgoingMessageDiv = createMessageElement("", "user-message");
+
+    // Add user message text
+    const messageTextDiv = document.createElement("div");
+    messageTextDiv.className = "message-text";
+    messageTextDiv.textContent = userData.message;
+
+    // Add timestamp
+    const timeDiv = document.createElement("div");
+    timeDiv.className = "message-time";
+    timeDiv.textContent = getCurrentTime();
+
+    messageTextDiv.appendChild(timeDiv);
+    outgoingMessageDiv.appendChild(messageTextDiv);
     chatBody.appendChild(outgoingMessageDiv);
 
-    // Add 'thinking' animation
+    // Add thinking animation
     const thinking = addThinkingMessage();
-
-    chatBody.appendChild(thinkingMessageDiv);
+    chatBody.appendChild(thinking);
     chatBody.scrollTop = chatBody.scrollHeight;
 
     // Simulate delay, then show bot reply
@@ -476,6 +547,7 @@ sendMessage.addEventListener("click", handleOutgoingMessage);
         addBotMessage(botReply);     // show reply
     }, 500);
 };
+
 
 
     sendChat.addEventListener("click", handleOutgoingChat);
@@ -533,20 +605,20 @@ const clickPop = () => {
         chatBox.classList.toggle('chat-up');
         chatMsg.classList.remove("chat-msg-active");
     }, 100);
-    
+    // const thinKing = addThinkingMessage();
     chatPop.classList.toggle('scale');
-    thinKing.style.display = "flex";
+    
 
     firstMSg.forEach(msg => {
-        msg.style.display = "none";
+        msg.classList.add("f-active");
     });
 
     setTimeout(() => {
-        thinKing.style.display = "none";
+    // thinKing.remove();
         firstMSg.forEach(msg => {
-            msg.style.display = "flex";
+             msg.classList.remove("f-active");
         });
-    }, 2000);
+    }, 1000);
 };
 
 chatPop.addEventListener('click', clickPop);

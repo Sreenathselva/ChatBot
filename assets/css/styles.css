@@ -32,7 +32,7 @@ body,html{
     border-radius: .5vw;
     visibility: hidden;
     opacity: 0;
-    box-shadow: -3px 4px 2px 0px #4d4d4d; 
+    box-shadow: -3px 4px 12px -2px #4d4d4d73;
 }
 .chat-msg-active{
     visibility: visible !important;
@@ -82,6 +82,9 @@ body,html{
 }
 .chat-pop svg{
     width: 50%;
+}
+.f-active{
+    display: none !important;
 }
 .bot-img{
     width: 2.5vw;
@@ -197,7 +200,7 @@ font-size: 1.1vw;
 .chat-box{
     position: relative;
     width: 100%;
-    height: 25vw;
+    height: 30vw;
     display: flex;
     flex-direction: column;
     overflow-y: scroll;
@@ -206,6 +209,7 @@ font-size: 1.1vw;
     display: none;
 }
 .message{
+    position: relative;
     width: 100%;
     display: flex;
     align-items: end;
@@ -216,13 +220,15 @@ font-size: 1.1vw;
     font-family: 'barlow';
 }
 .message-text{
+    position: relative;
     max-width: 65%;
     border-radius: 5px;
-    padding: .5vw 1vw;
+    padding: 0.5vw 1vw 1.5vw;
     min-height: 2vw;
+    min-width: 3vw;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: end;
     gap: .5vw;
 }
 .message-text input{
@@ -231,6 +237,12 @@ font-size: 1.1vw;
     border: none;
     padding: .5vw;
     width: 95%;
+}
+.message-time{
+    position: absolute;
+    font-size: .8vw;
+    right: 1vw;
+    bottom: 0.5vw;
 }
 .user-inputs{
     position: relative;
@@ -302,10 +314,11 @@ font-size: 1.1vw;
 }
 .bot-message li:hover{
     background-color: #53A7DD;
-
 }
 .thinking .message-text{
     border-radius: 10vw;
+    padding: .5vw 1vw;
+    min-width: 0vw;
 }
 .thinking-indicator{
     display: flex;
@@ -527,6 +540,12 @@ a{
     max-width: 65%;
     font-size: 4vw;
     }
+    .message-time {
+    position: absolute;
+    font-size: 2.5vw;
+    right: 4vw;
+    bottom: 1vw;
+    }
     .chat-bot-right {
     display: flex;
     gap: 4vw;
@@ -534,7 +553,7 @@ a{
     .message-text {
     font-size: 4vw;
     border-radius: 10px;
-    padding: 3vw;
+    padding: 2.5vw 4vw 5vw;
     gap: 2vw;
     }
     .bot-message li {

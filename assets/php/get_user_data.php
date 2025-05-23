@@ -1,11 +1,13 @@
 <?php
-// require_once __DIR__ . '/db.php';
+require_once __DIR__ . '/db.php';
 
 // MySQL credentials
-$host = "localhost";
-$username = "root";
-$password = "";
-$database = "chatbot_data";
+// $host = "localhost";
+// $username = "root";
+// $password = "";
+// $database = "chatbot_data";
+
+// $conn = new mysqli($host, $username, $password, $database);
 
 header('Content-Type: application/json');
 
@@ -19,7 +21,7 @@ if ($conn->connect_error) {
     exit;
 }
 
-$result = $conn->query("SELECT id, name, email, purpose, phone, jobTitle, company, created_at FROM users_hybrid ORDER BY id DESC");
+$result = $conn->query("SELECT id, name, email, purpose, phone, jobTitle, company, created_at FROM user_hybrid ORDER BY id DESC");
 
 $data = [];
 
